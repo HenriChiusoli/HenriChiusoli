@@ -9,13 +9,17 @@ tela = pygame.display.set_mode(tamanhoTela)
 pygame.display.set_caption("Homeless Walker ")
 dt = 0
 
+fonteTempo = pygame.font.Font("assets/Fonts/EnergyStation.ttf", 80)
+
 folhaSpritesIdle = pygame.image.load("assets/Homeless_1/Idle_2.png").convert_alpha()
 folhaSpritesWalk = pygame.image.load("assets/Homeless_1/Walk.png").convert_alpha()
 folhaSpritesJump = pygame.image.load("assets/Homeless_1/Jump.png").convert_alpha()
+folhaSpritesRunn = pygame.image.load("assets/Homeless_1/Run.png").convert_alpha()
 
 framesIdle = []
 framesWalk = []
 framesJump = []
+framesRunn = []
 
 for i in range(6):
     frame = folhaSpritesIdle.subsurface(i * 128, 0, 128, 128)
@@ -32,6 +36,11 @@ for i in range(9):
     frame = pygame.transform.scale(frame, (256, 256))
     framesJump.append(frame)
 
+for i in range(8):
+    frame = folhaSpritesRunn.subsurface(i * 128, 0, 128, 128)
+    frame = pygame.transform.scale(frame, (256, 256))
+    framesRunn.append(frame)
+
 indexFrameIdle = 0
 tempoAnimacaoIdle = 0.0
 velocidadeAnimacaoIdle = 5
@@ -43,6 +52,10 @@ velocidadeAnimacaoWalk = 10
 indexFrameJump = 0
 tempoAnimacaoJump = 0.0
 velocidadeAnimacaoJumo = 3
+
+indexFrameRunn = 0
+tempoAnimacaoRunn = 0.0
+velocidadeAnimacaoRunn = 10
 
 personagemRect = framesIdle[0].get_rect(midbottom = (250, 480))
 
@@ -68,7 +81,14 @@ for i in range(len(listBgImages)):
     
 
 TAMANHO_CHAO = 580
-VELOCIDADE_PERSONAGEM = 10
+# VELOCIDADE_PERSONAGEM = 10
+velocidadePersonagem = 30
+
+tempoJogo = 0
+
+AUMENTA_DIFICULDADE = pygame.USEREVENT + 1
+
+pygame.time.set_timer(AUMENTA_DIFICULDADE, 10000)
 
 
 while True:
@@ -76,6 +96,9 @@ while True:
         if event.type == pygame.QUIT:
             pygame.quit()
             exit()
+
+        if event.type == AUMENTA_DIFICULDADE:
+            velocidadePersonagem += 4
 
     tela.fill((255, 255, 255))
 
