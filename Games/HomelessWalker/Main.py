@@ -44,7 +44,7 @@ indexFrameJump = 0
 tempoAnimacaoJump = 0.0
 velocidadeAnimacaoJumo = 3
 
-personagemRect = framesIdle[0].get_rect(midbottom = (100, 480))
+personagemRect = framesIdle[0].get_rect(midbottom = (250, 480))
 
 gravidade = 1
 direcaoPersonagem = 1
@@ -68,6 +68,9 @@ for i in range(len(listBgImages)):
     
 
 TAMANHO_CHAO = 580
+VELOCIDADE_PERSONAGEM = 10
+
+
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -77,7 +80,8 @@ while True:
     tela.fill((255, 255, 255))
 
     for i in range(len(listBgImages)):
-        ListaBgPosicoes[i] -= listBgVelocidades[i] * 10 * dt
+        if estaAndando:
+            ListaBgPosicoes[i] -= listBgVelocidades[i] * VELOCIDADE_PERSONAGEM * dt * direcaoPersonagem
 
         if ListaBgPosicoes[i] <= -tamanhoTela[0]:
             ListaBgPosicoes[i] = 0
