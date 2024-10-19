@@ -92,6 +92,8 @@ while True:
 
         tela.blit(listBgImages[i], (ListaBgPosicoes[i] + tamanhoTela[0], 0))
 
+        tela.blit(listBgImages[i], (ListaBgPosicoes[i] + -tamanhoTela[0], 0 ))
+
     tempoAnimacaoIdle += dt
 
     if tempoAnimacaoIdle >= 1 / velocidadeAnimacaoIdle:
@@ -115,12 +117,12 @@ while True:
     teclas = pygame.key.get_pressed()
 
     if teclas[pygame.K_LEFT]:
-        personagemRect.x -= 200 * dt
+        # personagemRect.x -= 200 * dt
         direcaoPersonagem = -1
         estaAndando = True 
 
     if teclas[pygame.K_RIGHT]:
-        personagemRect.x += 200 * dt
+        # personagemRect.x += 200 * dt
         direcaoPersonagem = 1
         estaAndando = True
 
