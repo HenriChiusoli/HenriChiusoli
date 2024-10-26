@@ -16,12 +16,14 @@ folhaSpritesIdle = pygame.image.load("assets/Homeless_1/Idle_2.png").convert_alp
 folhaSpritesWalk = pygame.image.load("assets/Homeless_1/Walk.png").convert_alpha()
 folhaSpritesJump = pygame.image.load("assets/Homeless_1/Jump.png").convert_alpha()
 folhaSpritesRunn = pygame.image.load("assets/Homeless_1/Run.png").convert_alpha()
+folhaSpritesDead = pygame.image.load("assets/Homeless_1/Dead.png").convert_alpha()
 
 framesIdle = []
 framesWalk = []
 framesJump = []
 framesRunn = []
 listaObstaculos = []
+listFramesDead = []
 
 for i in range(6):
     frame = folhaSpritesIdle.subsurface(i * 128, 0, 128, 128)
@@ -43,6 +45,11 @@ for i in range(8):
     frame = pygame.transform.scale(frame, (256, 256))
     framesRunn.append(frame)
 
+for i in range(4):
+    frame = folhaSpritesDead.subsurface(i * 128, 0, 128, 128)
+    frame = pygame.transform.scale(frame, (256, 256))
+    listFramesDead.append(frame)
+
 indexFrameIdle = 0
 tempoAnimacaoIdle = 0.0
 velocidadeAnimacaoIdle = 5
@@ -58,6 +65,10 @@ velocidadeAnimacaoJumo = 3
 indexFrameRunn = 0
 tempoAnimacaoRunn = 0.0
 velocidadeAnimacaoRunn = 10
+
+indexFrameDead = 0
+tempoAnimacaoDead = 0.0
+velocidadeAnimacaoDead = 3
 
 personagemRect = framesIdle[0].get_rect(midbottom = (250, 480))
 pesrsonagemColisaoRect = pygame.Rect(personagemRect.x, personagemRect.y, 80, 120)
@@ -213,6 +224,14 @@ while True:
         indexFrameRunn = (indexFrameRunn + 1) % len(framesRunn)
         tempoAnimacaoRunn = 0.0
 
+    if GameOver and indexFrameDead != len(listFramesDead) - 1:
+        tempoAnimacaoDead += dt
+
+
+    if tempoAnimacaoDead >= 1 / velocidadeAnimacaoDead:
+        indexFrameDead = (indexFrameDead + 1) % len(list(listFramesDead))
+        tempoAnimacaoDead = 0.0
+
     estaAndando = False
 
     teclas = pygame.key.get_pressed()
@@ -241,6 +260,7 @@ while True:
             velocidadePersonagem = 30
             tempoMaximoEntreObstaculos = 3000
             listaObstaculos = []
+            indexFrameDead = 0
     
     gravidade += 2
 
@@ -251,23 +271,26 @@ while True:
 
     pesrsonagemColisaoRect.midbottom = personagemRect.midbottom
 
-    if gravidade < 0:
-        frame = framesJump[indexFrameJump]
-    else:
-        if estaAndando:
-            #frame = framesWalk[indexFrameWalk]
-            if velocidadePersonagem < 40:
-                frame = framesWalk[indexFrameWalk]
-            if velocidadePersonagem < 50:
-                frame = framesRunn[indexFrameRunn]
-            elif velocidadePersonagem < 70:
-                velocidadeAnimacaoRunn = 30
-                frame = framesRunn[indexFrameRunn]
-            else:
-                velocidadeAnimacaoRunn = 40
-                frame = framesRunn[indexFrameRunn]
+    if not GameOver:
+        if gravidade < 0: # Verifica se o personagem está subindo
+            frame = framesJump[indexFrameJump]
         else:
-            frame = framesIdle[indexFrameIdle]
+            if estaAndando: # Verifica se o personagem está andando
+                if velocidadePersonagem < 40:
+                    frame = framesWalk[indexFrameWalk]
+                if velocidadePersonagem < 50:
+                    frame = framesRunn[indexFrameRunn]
+                elif velocidadePersonagem < 70:
+                    velocidadeAnimacaoRunn = 30
+                    frame = framesRunn[indexFrameRunn]
+                else:
+                    velocidadeAnimacaoRunn = 40
+                    frame = framesRunn[indexFrameRunn]
+                
+            else: # Caso contrário, o personagem está parado
+                frame = framesIdle[indexFrameIdle]
+    else:
+        frame = listFramesDead[indexFrameDead]
 
     if direcaoPersonagem == -1:
         frame = pygame.transform.flip(frame, True, False)
