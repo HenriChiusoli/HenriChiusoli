@@ -1,5 +1,6 @@
 ## Olá! Eu sou o Henri Chiusoli
 
+- 💻 Formado em Analise e Desenvolvimento de Sistemas
 - 🌱 Estudando python e javascript
 - 💬 Contate-me no e-mail: henrichiusoli2003@gmail.com
 - 😄 Pronomes: ele/dele
